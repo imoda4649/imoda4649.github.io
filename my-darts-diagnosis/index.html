@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>マイダーツ診断｜12の質問で分かる、あなたに合うバレル</title>
+<meta name="description" content="12の質問に答えるだけで、自分に合うダーツバレルのスペックと、実際に買える製品候補が分かる無料診断です。登録不要。">
+<style>
+  :root{
+    --bg:#14120e; --bg2:#1d1a14; --card:#23201a; --card2:#2a261e;
+    --line:#3a352a; --brass:#c9a227; --brass2:#e6c65a;
+    --text:#f2ecdd; --sub:#b8b09c; --good:#8fce6e; --bad:#e08a6e;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif;
+    line-height:1.6;
+  }
+  .wrap{max-width:640px; margin:0 auto; padding:20px 16px 48px;}
+  header.top{text-align:center; padding:28px 0 8px;}
+  header.top .logo{font-size:2rem; letter-spacing:.12em; color:var(--brass2);
+    font-family:"Hiragino Mincho ProN","Yu Mincho",serif; font-weight:700;}
+  header.top .tagline{color:var(--sub); margin-top:6px;}
+  .rule{height:1px; background:linear-gradient(90deg,transparent,var(--brass),transparent); margin:18px 0;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px; margin:14px 0;}
+  .btn{
+    display:block; width:100%; min-height:52px; padding:12px 16px; margin:10px 0;
+    background:var(--card2); color:var(--text); border:1px solid var(--line);
+    border-radius:10px; font-size:1rem; text-align:left; cursor:pointer;
+  }
+  .btn:hover,.btn:active{border-color:var(--brass);}
+  .btn .note{display:block; font-size:.82rem; color:var(--sub); margin-top:2px;}
+  .btn.primary{
+    background:linear-gradient(180deg,#d9b83a,#b8931f); color:#1a170e; font-weight:700;
+    text-align:center; border:none;
+  }
+  .btn.small{min-height:44px; text-align:center; font-size:.92rem;}
+  .btn:disabled{opacity:.4; cursor:default;}
+  .progress{height:6px; background:var(--card2); border-radius:3px; overflow:hidden; margin:8px 0 4px;}
+  .progress > div{height:100%; background:var(--brass); width:0%; transition:width .25s;}
+  .qcount{color:var(--sub); font-size:.85rem; text-align:right;}
+  h2.q{font-size:1.25rem; margin:10px 0 2px;}
+  .qsub{color:var(--sub); font-size:.9rem; margin:0 0 8px;}
+  .backlink{background:none; border:none; color:var(--sub); font-size:.9rem; cursor:pointer; padding:8px 0;}
+  h3.sec{color:var(--brass2); font-size:1.05rem; margin:22px 0 6px; letter-spacing:.05em;}
+  table.spec{width:100%; border-collapse:collapse;}
+  table.spec th, table.spec td{padding:7px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top;}
+  table.spec th{color:var(--sub); font-weight:400; width:38%;}
+  .silhouette{text-align:center; padding:8px 0 0;}
+  .product{border:1px solid var(--line); border-radius:10px; padding:14px; margin:10px 0; background:var(--card);}
+  .product.sub{opacity:.92; padding:10px 14px;}
+  .product .pname{font-weight:700;}
+  .product .pmaker{color:var(--sub); font-size:.85rem;}
+  .score{float:right; color:var(--brass2); font-weight:700; font-size:1.1rem;}
+  .product .pspec{color:var(--sub); font-size:.88rem; margin-top:4px;}
+  .product .pprice{margin-top:4px;}
+  .product .pprice b{color:var(--brass2);}
+  .good{color:var(--good); font-size:.88rem;}
+  .bad{color:var(--bad); font-size:.88rem;}
+  .plink{display:inline-block; margin-top:8px; color:var(--brass2); text-decoration:none; border:1px solid var(--brass); border-radius:8px; padding:8px 14px; font-size:.9rem;}
+  .notice{color:var(--sub); font-size:.82rem; margin-top:10px;}
+  footer{color:var(--sub); font-size:.8rem; text-align:center; margin-top:36px; line-height:1.7;}
+  .hidden{display:none;}
+  .center{text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="logo">マイダーツ診断</div>
+    <div class="tagline">12の質問で分かる、あなたに合うバレル</div>
+  </header>
+  <div class="rule"></div>
+
+  <!-- トップ -->
+  <section id="view-top">
+    <div class="card">
+      <p>ダーツのバレル（胴体）選びで迷っていませんか？</p>
+      <p>グリップの位置、投げ方、好みの感触などを12問聞いて、あなたに合うバレルの形・重さ・長さ・重心と、おすすめのセッティングを提案します。結果に近い、実際に販売中のバレルも紹介します。</p>
+      <p class="notice">所要時間は約1分。登録不要・無料です。</p>
+      <button class="btn primary" id="btn-start">診断をはじめる</button>
+    </div>
+  </section>
+
+  <!-- 質問 -->
+  <section id="view-quiz" class="hidden">
+    <div class="qcount"><span id="q-num">1</span> / 12</div>
+    <div class="progress"><div id="q-bar"></div></div>
+    <h2 class="q" id="q-title"></h2>
+    <p class="qsub" id="q-sub"></p>
+    <div id="q-options"></div>
+    <div id="q-extra"></div>
+    <button class="backlink" id="btn-back">← もどる</button>
+  </section>
+
+  <!-- 結果 -->
+  <section id="view-result" class="hidden">
+    <h3 class="sec">あなたの推奨スペック</h3>
+    <div class="card">
+      <div class="silhouette" id="r-silhouette"></div>
+      <table class="spec" id="r-spec"></table>
+    </div>
+
+    <h3 class="sec">おすすめセッティング</h3>
+    <div class="card">
+      <table class="spec" id="r-setting"></table>
+    </div>
+
+    <h3 class="sec">提案理由</h3>
+    <div class="card" id="r-reasons"></div>
+
+    <h3 class="sec">この診断に近い販売中バレル</h3>
+    <div id="r-products"></div>
+    <p class="notice">価格は各商品の確認日時点のものです。最新の価格・在庫は販売ページでご確認ください。売り切れの商品は表示していません。</p>
+
+    <button class="btn primary" id="btn-share">結果をXでシェア</button>
+    <button class="btn small" id="btn-copy">結果をコピー</button>
+    <button class="btn small" id="btn-restart">もう一度診断する</button>
+  </section>
+
+  <footer>
+    マイダーツ診断（公開版）<br>
+    商品データは手動で更新しています。スペックは各販売ページの表記に基づきます。
+  </footer>
+</div>
+
+<script src="products.js"></script>
+<script>
+"use strict";
+/* ============================================================
+   マイダーツ診断 ロジック
+   ============================================================ */
+const APP_URL = "https://imoda4649.github.io/my-darts-diagnosis/";
+
+const QUESTIONS = [
+  { id:"exp", title:"ダーツ歴を教えてください", sub:"初めての方も安心して答えてください",
+    options:[
+      {v:"first", label:"初めて買う", note:"最初の1セットを探している"},
+      {v:"months", label:"数ヶ月くらい"},
+      {v:"year", label:"1年以上"},
+      {v:"renew", label:"買い替え検討中", note:"今のバレルから乗り換えたい"}
+    ]},
+  { id:"grip", title:"グリップ位置はどこですか？", sub:"バレルのどのあたりを持つか",
+    options:[
+      {v:"front", label:"前方", note:"先端寄りを持つ"},
+      {v:"center", label:"中央"},
+      {v:"rear", label:"後方", note:"シャフト寄りを持つ"},
+      {v:"unknown", label:"決まっていない・分からない"}
+    ]},
+  { id:"shape", title:"バレルの形の好みは？", sub:"見た目と持ち感のイメージでOK",
+    options:[
+      {v:"torpedo", label:"トルピード", note:"太めで短く、前が太い"},
+      {v:"straight", label:"ストレート", note:"細くて長く、太さが均一"},
+      {v:"barrel", label:"樽型（バレル型）", note:"真ん中が膨らんだ形"},
+      {v:"auto", label:"おまかせ", note:"他の回答から提案します"}
+    ]},
+  { id:"weight", title:"重さの好みは？", sub:"バレル単体の重さ",
+    options:[
+      {v:"light", label:"軽め", note:"〜18g・軽快に飛ばしたい"},
+      {v:"standard", label:"標準", note:"19〜20g"},
+      {v:"heavy", label:"重め", note:"21g〜・ずっしり安定"},
+      {v:"auto", label:"おまかせ"}
+    ]},
+  { id:"length", title:"長さの好みは？",
+    options:[
+      {v:"short", label:"短め", note:"〜44mm"},
+      {v:"standard", label:"標準", note:"45〜48mm"},
+      {v:"long", label:"長め", note:"49mm〜"},
+      {v:"auto", label:"おまかせ"}
+    ]},
+  { id:"dia", title:"太さ（最大径）の好みは？",
+    options:[
+      {v:"thin", label:"細め", note:"〜6.5mm"},
+      {v:"standard", label:"標準", note:"6.6〜7.0mm"},
+      {v:"thick", label:"太め", note:"7.1mm〜"},
+      {v:"auto", label:"おまかせ"}
+    ]},
+  { id:"cutType", title:"カット（溝）の種類の好みは？", sub:"バレルの滑り止めの模様",
+    options:[
+      {v:"ring", label:"リングカット", note:"横溝が並んだ定番"},
+      {v:"micro", label:"マイクロカット", note:"細かい刻みで程よい掛かり"},
+      {v:"shark", label:"シャークカット", note:"ギザギザで強い掛かり"},
+      {v:"complex", label:"複合カット", note:"複数のカットの組み合わせ"},
+      {v:"auto", label:"分からない・おまかせ"}
+    ]},
+  { id:"cutLevel", title:"カットの強さ（掛かり）は？", sub:"指への引っかかり具合",
+    options:[
+      {v:1, label:"弱め", note:"滑らかでリリースしやすい"},
+      {v:2, label:"普通"},
+      {v:3, label:"強め", note:"しっかり掛かって力が伝わる"}
+    ]},
+  { id:"balance", title:"重心の好みは？", sub:"バレルの重さの寄り方",
+    options:[
+      {v:"front", label:"フロント", note:"前が重い・押し出しやすい"},
+      {v:"center", label:"センター", note:"真ん中・バランス型"},
+      {v:"rear", label:"リア", note:"後ろが重い"},
+      {v:"auto", label:"おまかせ"}
+    ]},
+  { id:"throw", title:"投げ方・飛ばし方は？",
+    options:[
+      {v:"push", label:"押し出す", note:"前にスッと押し出す感じ"},
+      {v:"swing", label:"振り抜く", note:"腕の振りで飛ばす"},
+      {v:"drop", label:"落とすように", note:"山なりにふわりと"},
+      {v:"unknown", label:"分からない"}
+    ]},
+  { id:"tip", title:"チップの規格は？", sub:"ソフトダーツの主流は2BA",
+    options:[
+      {v:"2ba", label:"2BA（ソフト）"},
+      {v:"steel", label:"スティール", note:"ハードダーツ"},
+      {v:"undecided", label:"まだ決めていない"}
+    ]}
+];
+
+const BUDGETS = [
+  {v:"b8000", label:"〜¥8,000", cap:8000},
+  {v:"b15000", label:"〜¥15,000", cap:15000},
+  {v:"b25000", label:"〜¥25,000", cap:25000},
+  {v:"bnone", label:"上限なし", cap:Infinity}
+];
+const STYLES = [
+  {v:"control", label:"コントロール志向", note:"狙った所へ正確に"},
+  {v:"stable", label:"安定志向", note:"飛びのブレを抑えたい"},
+  {v:"power", label:"パワー志向", note:"勢いよく飛ばしたい"}
+];
+
+const SHAPE_LABEL = { torpedo:"トルピード", straight:"ストレート", barrel:"樽型" };
+const BALANCE_LABEL = { front:"フロント", "semi-front":"セミフロント", center:"センター", "semi-rear":"セミリア", rear:"リア" };
+const BALANCE_ORDER = { front:0, "semi-front":1, center:2, "semi-rear":3, rear:4 };
+const CUT_LABEL = { ring:"リングカット", micro:"マイクロカット", shark:"シャークカット", complex:"複合カット" };
+const CUT_KEYWORD = { ring:"リング", micro:"マイクロ", shark:"シャーク" };
+const CUTLEVEL_LABEL = { 1:"弱め", 2:"普通", 3:"強め" };
+
+/* 回答 → 推奨スペック */
+function diagnose(a){
+  // 形
+  let shape;
+  if (a.shape !== "auto") shape = a.shape;
+  else if (a.grip === "front" || a.throw === "push") shape = "torpedo";
+  else if (a.length === "long" || a.weight === "light") shape = "straight";
+  else if (a.exp === "first") shape = "torpedo";
+  else shape = "straight";
+
+  // 重さ・長さ・太さ
+  const weight = { light:18.0, standard:19.5, heavy:20.5, auto:19.5 }[a.weight];
+  const length = { short:43.0, standard:46.0, long:50.0, auto:46.0 }[a.length];
+  const maxDia = { thin:6.3, standard:6.8, thick:7.3, auto:6.8 }[a.dia];
+
+  // 重心
+  let balance;
+  if (a.balance !== "auto") balance = a.balance;
+  else if (a.grip === "front" || a.throw === "push") balance = "front";
+  else if (a.grip === "rear") balance = "semi-rear";
+  else balance = "center";
+
+  // カット
+  let cutType;
+  if (a.cutType !== "auto") cutType = a.cutType;
+  else if (a.style === "control") cutType = "micro";
+  else if (a.exp === "first") cutType = "ring";
+  else cutType = "complex";
+  const cutLevel = a.cutLevel;
+
+  // タングステン率（予算に余裕があれば95%）
+  const tungsten = (a.budget === "b25000" || a.budget === "bnone") ? 95 : 90;
+
+  // セッティング
+  const shaft = (balance === "front" || balance === "semi-front") ? "40mm（インターミディエイト）"
+              : (balance === "center") ? "43mm（インターミディエイト）"
+              : "48mm（ミディアム）";
+  const flight = (a.style === "power") ? "シェイプ" : "スタンダード";
+  const tipText = a.tip === "steel" ? "スティールポイント"
+              : a.tip === "undecided" ? "2BA（Premium Lippoint系）※ソフト規格の場合"
+              : "2BA（Premium Lippoint系）";
+
+  // 提案理由
+  const reasons = [];
+  if (shape === "torpedo") reasons.push("前が太くテーパーで押し出せるトルピード型が土台です。短めで取り回しがよく、力を伝えやすい形です。");
+  if (shape === "straight") reasons.push("太さが均一なストレート型が土台です。グリップ位置の自由度が高く、長く使える形です。");
+  if (shape === "barrel") reasons.push("真ん中が膨らんだ樽型が土台です。膨らみが指にフィットして、毎回同じ位置を握りやすくなります。");
+  if (balance === "front" || balance === "semi-front")
+    reasons.push("グリップ位置と投げ方から、重心は前寄りが合います。押し出す力がそのままダーツに伝わりやすくなります。");
+  else if (balance === "center")
+    reasons.push("重心はセンターで、クセのない素直な飛びになります。まずの1セットとしても扱いやすいバランスです。");
+  else
+    reasons.push("後方グリップに合わせて重心は後ろ寄りです。手元でバレルを感じながら投げられます。");
+  reasons.push(`カットは${CUT_LABEL[cutType]}（掛かり：${CUTLEVEL_LABEL[cutLevel]}）。${a.style === "control" ? "コントロール志向なので、リリースの邪魔をしない掛かりに抑えています。" : a.style === "power" ? "パワー志向なので、力が逃げない掛かりにしています。" : "安定した飛びのために、標準的な掛かりにしています。"}`);
+
+  return {
+    shape, shapeLabel: SHAPE_LABEL[shape],
+    weight, length, maxDia,
+    balance, balanceLabel: BALANCE_LABEL[balance],
+    cutType, cutTypeLabel: CUT_LABEL[cutType],
+    cutLevel, cutLevelLabel: CUTLEVEL_LABEL[cutLevel],
+    tungsten, shaft, flight, tipText, reasons
+  };
+}
+
+/* 推奨スペック → 商品マッチング */
+function matchProducts(spec, a, products){
+  const cap = (BUDGETS.find(b => b.v === a.budget) || {}).cap ?? Infinity;
+  const results = [];
+  for (const p of products){
+    if (!p.inStock) continue;
+    let penalty = 0;
+    const good = [], bad = [];
+
+    // 形
+    if (p.shape == null) penalty += 6;
+    else if (p.shape === spec.shape) good.push(`形が${spec.shapeLabel}で一致`);
+    else { penalty += 18; bad.push(`形が${SHAPE_LABEL[p.shape] || p.shape}（診断は${spec.shapeLabel}）`); }
+
+    // 重さ
+    const dw = Math.abs(p.weight - spec.weight);
+    penalty += Math.min(18, dw / 0.5 * 3);
+    if (dw <= 0.5) good.push(`重さがほぼ同じ（${p.weight}g）`);
+    else bad.push(`重さ ${p.weight}g（診断は${spec.weight}g）`);
+
+    // 長さ
+    const dl = Math.abs(p.length - spec.length);
+    penalty += Math.min(12, dl * 1.2);
+    if (dl <= 1) good.push(`長さがほぼ同じ（${p.length}mm）`);
+    else bad.push(`長さ ${p.length}mm（診断は${spec.length}mm）`);
+
+    // 太さ
+    const dd = Math.abs(p.maxDia - spec.maxDia);
+    penalty += Math.min(12, dd / 0.1 * 2.5);
+    if (dd <= 0.1) good.push(`太さがほぼ同じ（${p.maxDia}mm）`);
+    else bad.push(`太さ ${p.maxDia}mm（診断は${spec.maxDia}mm）`);
+
+    // 重心
+    if (p.balance == null) penalty += 3;
+    else {
+      const db = Math.abs(BALANCE_ORDER[p.balance] - BALANCE_ORDER[spec.balance]);
+      if (db === 0) good.push(`重心が${spec.balanceLabel}で一致`);
+      else if (db === 1) penalty += 5;
+      else { penalty += 12; bad.push(`重心が${BALANCE_LABEL[p.balance]}（診断は${spec.balanceLabel}）`); }
+    }
+
+    // カット
+    if (!p.cut) penalty += 3;
+    else {
+      const kw = CUT_KEYWORD[spec.cutType];
+      const hit = kw ? p.cut.includes(kw) : (spec.cutType === "complex" && (p.cut.includes("＋") || p.cut.includes("+")));
+      if (hit) good.push(`カットが${spec.cutTypeLabel}系`);
+      else penalty += 8;
+    }
+    if (p.cutLevel == null) penalty += 2;
+    else penalty += Math.min(6, Math.abs(p.cutLevel - spec.cutLevel) * 3);
+
+    // タングステン
+    if (p.tungsten === spec.tungsten) good.push(`タングステン${spec.tungsten}%で一致`);
+    else penalty += 3;
+
+    // 予算
+    if (p.price != null){
+      if (p.price <= cap) good.push("予算内");
+      else { penalty += 12; bad.push(`予算オーバー（¥${p.price.toLocaleString()}）`); }
+    }
+
+    results.push({ product:p, score: Math.max(0, Math.round(100 - penalty)), good, bad });
+  }
+  results.sort((x, y) => y.score - x.score);
+  return results;
+}
+
+/* ============================================================
+画面制御（ブラウザでのみ実行）
+============================================================ */
+if (typeof document!== "undefined"){
+
+const answers = {};
+let step = 0; // 0..10 = QUESTIONS、11 = 予算・スタイル
+let lastSpec = null;
+
+const $ = id => document.getElementById(id);
+const views = { top:$("view-top"), quiz:$("view-quiz"), result:$("view-result")};
+function show(name){
+for (const k in views) views[k].classList.toggle("hidden", k!== name);
+window.scrollTo(0, 0);
+}
+
+function barrelSVG(shape){
+const paths = {
+torpedo: "M20,10 L225,20 Q278,23 280,27 L280,37 Q278,41 225,44 L20,54 Z",
+straight: "M20,17 L280,17 L280,47 L20,47 Z",
+barrel: "M20,25 Q90,6 150,7 Q212,6 280,25 L280,39 Q212,58 150,57 Q90,58 20,39 Z"
+};
+return `<svg width="300" height="64" viewBox="0 0 300 64" role="img" aria-label="${SHAPE_LABEL[shape]}の模式図">
+<defs><linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#e6c65a"/><stop offset=".5" stop-color="#c9a227"/><stop offset="1" stop-color="#8a6d14"/>
+</linearGradient></defs>
+<path d="${paths[shape]}" fill="url(#bg1)" stroke="#5c4a0e" stroke-width="1"/>
+<line x1="286" y1="32" x2="298" y2="32" stroke="#c9a227" stroke-width="3"/>
+</svg>
+<div class="notice center">${SHAPE_LABEL[shape]}のイメージ（模式図）</div>`;
+}
+
+function renderStep(){
+$("q-num").textContent = step + 1;
+$("q-bar").style.width = ((step + 1) / 12 * 100) + "%";
+$("btn-back").style.visibility = step === 0? "hidden": "visible";
+const box = $("q-options"), extra = $("q-extra");
+box.innerHTML = ""; extra.innerHTML = "";
+
+if (step < QUESTIONS.length){
+const q = QUESTIONS[step];
+$("q-title").textContent = q.title;
+$("q-sub").textContent = q.sub || "";
+for (const opt of q.options){
+const b = document.createElement("button");
+b.className = "btn";
+b.innerHTML = opt.label + (opt.note? `<span class="note">${opt.note}</span>`: "");
+b.onclick = () => { answers[q.id] = opt.v; step++; renderStep();};
+box.appendChild(b);
+}
+} else {
+// 12問目：予算＋スタイル
+$("q-title").textContent = "予算とプレースタイルは？";
+$("q-sub").textContent = "両方選ぶと結果が出ます";
+const mkGroup = (title, items, key) => {
+const h = document.createElement("p"); h.className = "qsub"; h.textContent = title; box.appendChild(h);
+for (const it of items){
+const b = document.createElement("button");
+b.className = "btn";
+b.innerHTML = it.label + (it.note? `<span class="note">${it.note}</span>`: "");
+if (answers[key] === it.v) b.style.borderColor = "var(--brass)";
+b.onclick = () => { answers[key] = it.v; renderStep();};
+box.appendChild(b);
+}
+};
+mkGroup("予算", BUDGETS, "budget");
+mkGroup("プレースタイル", STYLES, "style");
+const go = document.createElement("button");
+go.className = "btn primary"; go.textContent = "結果を見る";
+go.disabled =!(answers.budget && answers.style);
+go.onclick = showResult;
+extra.appendChild(go);
+}
+}
+
+function specRow(k, v){ return `<tr><th>${k}</th><td>${v}</td></tr>`;}
+
+function productCard(r, isSub){
+const p = r.product;
+const specLine = [
+p.shape? SHAPE_LABEL[p.shape]: null,
+`${p.weight}g`, `${p.length}mm`, `最大径${p.maxDia}mm`,
+p.balance? BALANCE_LABEL[p.balance]: null,
+p.cut || null, `タングステン${p.tungsten}%`
+].filter(Boolean).join(" / ");
+const price = p.price!= null? `<div class="pprice">価格 <b>¥${p.price.toLocaleString()}</b>（税込）${p.shop? `・${p.shop}`: ""} <span class="notice">${p.checkedAt}確認</span></div>`
+: `<div class="pprice">価格は販売ページでご確認ください${p.shop? `（${p.shop}）`: ""}</div>`;
+const link = p.url? `<a class="plink" href="${p.url}" target="_blank" rel="noopener">販売ページを見る</a>`: "";
+const goodBad = [
+r.good.length? `<div class="good">一致点：${r.good.join("、")}</div>`: "",
+r.bad.length? `<div class="bad">相違点：${r.bad.join("、")}</div>`: ""
+].join("");
+return `<div class="product${isSub? " sub": ""}">
+<span class="score">適合度 ${r.score}%</span>
+<div class="pname">${p.name}</div>
+<div class="pmaker">${p.maker}</div>
+<div class="pspec">${specLine}</div>
+${price}${goodBad}${link}
+</div>`;
+}
+
+function shareText(spec){
+return `マイダーツ診断の結果はでした🎯 あなたに合うバレルは？ #マイダーツ診断 ${APP_URL}`;
+}
+
+function showResult(){
+const spec = diagnose(answers);
+lastSpec = spec;
+$("r-silhouette").innerHTML = barrelSVG(spec.shape);
+$("r-spec").innerHTML =
+specRow("形", spec.shapeLabel) +
+specRow("重さ", spec.weight + "g") +
+specRow("全長", spec.length + "mm") +
+specRow("最大径", spec.maxDia + "mm") +
+specRow("重心", spec.balanceLabel) +
+specRow("カット", `${spec.cutTypeLabel}（掛かり：${spec.cutLevelLabel}）`) +
+specRow("タングステン率", spec.tungsten + "%");
+$("r-setting").innerHTML =
+specRow("シャフト", spec.shaft) +
+specRow("フライト", spec.flight) +
+specRow("チップ", spec.tipText);
+$("r-reasons").innerHTML = spec.reasons.map(r => `<p>${r}</p>`).join("");
+
+const matched = matchProducts(spec, answers, PRODUCTS);
+const top = matched.slice(0, 3), subs = matched.slice(3, 6);
+$("r-products").innerHTML =
+top.map(r => productCard(r, false)).join("") +
+(subs.length? `<h3 class="sec">次点</h3>` + subs.map(r => productCard(r, true)).join(""): "");
+show("result");
+}
+
+$("btn-start").onclick = () => { step = 0; show("quiz"); renderStep();};
+$("btn-back").onclick = () => {
+if (step === 11){ /* 予算・スタイル画面からは11問目へ */}
+if (step > 0){ step--; renderStep();}
+};
+$("btn-restart").onclick = () => {
+for (const k in answers) delete answers[k];
+step = 0; show("quiz"); renderStep();
+};
+$("btn-share").onclick = () => {
+if (!lastSpec) return;
+const url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareText(lastSpec));
+window.open(url, "_blank", "noopener");
+};
+$("btn-copy").onclick = async () => {
+if (!lastSpec) return;
+try { await navigator.clipboard.writeText(shareText(lastSpec)); $("btn-copy").textContent = "コピーしました";}
+catch(e){ $("btn-copy").textContent = "コピーできませんでした";}
+setTimeout(() => { $("btn-copy").textContent = "結果をコピー";}, 2000);
+};
+}
+</script>
+</body>
+</html>
